@@ -17,9 +17,9 @@ $ npm install svg_to_paint
 ## Usage
 
 ```node-js
-const svg_to_paint = require('svg_to_paint')
+const svgToPaint = require('svg_to_paint')
  
-svg_to_paint.generateDartFile('/Users/user/Desktop/file.xml','/Users/user/Desktop','svg_icon','absolute')
+svgToPaint.generateDartCode('/Users/user/Desktop/file.xml','/Users/user/Desktop','svg_icon','absolute')
 ```
 
 ## Contributing
