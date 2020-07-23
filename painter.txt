@@ -1,0 +1,151 @@
+class PointMap {
+  String key;
+  List<double> values = [];
+
+  PointMap({this.key, this.values});
+} 
+
+/// Create a list of PointMap
+/// this method "filters" the svg given and clean its
+///
+///
+/// ```dart
+List<PointMap> createPathMap(String absoluteSvg) {
+  var splittedInputPath = absoluteSvg.split(',');
+
+  List<PointMap> result = [];
+
+  const checkValue = ['M', 'm', 'L', 'l', 'H', 'h', 'V', 'v', 'C', 'c', 'Z', 'z'];
+  
+  splittedInputPath.forEach((element) {
+    if(checkValue.contains(element)) {
+      result.add(PointMap(key: element, values: []));
+    } else{
+      result.last.values.add(double.parse(element));
+    }
+  });
+
+ return result;
+} 
+
+/// Draw the svg from the list of PointMap
+///
+///
+/// ```dart
+Path drawPath(String absoluteSvg, viewPortWidth, viewPortHeight, Size size) {
+  List<PointMap> map = createPathMap(absoluteSvg);
+  Path path = Path();
+  int prev_element = 0;
+  map.forEach((element) {
+    switch (element.key) {
+      case "M":
+        path
+          ..moveTo((element.values[0] / viewPortWidth) * size.width,
+              (element.values[1] / viewPortHeight) * size.height);
+        break;
+      case "V":
+        path
+          ..lineTo(
+              (previousElement(map, map[prev_element - 1], element.key) /
+                      viewPortWidth) *
+                  size.width,
+              (element.values[0] / viewPortHeight) * size.height);
+        break;
+      case "H":
+        path
+          ..lineTo(
+              (element.values[0] / viewPortWidth) * size.width,
+              (previousElement(map, map[prev_element - 1], element.key) /
+                      viewPortHeight) *
+                  size.height);
+        break;
+      case "C":
+        path
+          ..cubicTo(
+              (element.values[0] / viewPortWidth) * size.width,
+              (element.values[1] / viewPortHeight) * size.height,
+              (element.values[2] / viewPortWidth) * size.width,
+              (element.values[3] / viewPortHeight) * size.height,
+              (element.values[4] / viewPortWidth) * size.width,
+              (element.values[5] / viewPortHeight) * size.height);
+        break;
+      case "S":
+        path
+          ..lineTo((element.values[0] / viewPortWidth) * size.width,
+              (element.values[1] / viewPortHeight) * size.height);
+        path
+          ..lineTo((element.values[2] / viewPortWidth) * size.width,
+              (element.values[3] / viewPortHeight) * size.height);
+
+        break;
+      case "L":
+        path
+          ..lineTo((element.values[0] / viewPortWidth) * size.width,
+              (element.values[1] / viewPortHeight) * size.height);
+                break;
+    }
+
+    prev_element++;
+  });
+  path..close();
+  return path;
+}
+
+/// Return the previous element of a list
+///
+///
+/// ```dart
+double previousElement(List<PointMap> map, PointMap point, String key) {
+  //Check the need of a x or a y
+  double value = 0;
+  if (key == "V") {
+    switch (point.key) {
+      case "M":
+        value = point.values[0];
+        break;
+      case "C":
+        value = point.values[4];
+        break;
+      case "S":
+        value = point.values[2];
+        break;
+      case "V":
+        value = point.values[0];
+        break;
+      case "H":
+        value = point.values[0];
+        break;
+      case "L":
+        value = point.values[0];
+        break;
+      default:
+        value = 0;
+        break;
+    }
+  } else if (key == "H") {
+    switch (point.key) {
+      case "M":
+        value = point.values[1];
+        break;
+      case "C":
+        value = point.values[5];
+        break;
+      case "S":
+        value = point.values[3];
+        break;
+      case "V":
+        value = point.values[0];
+        break;
+      case "H":
+        value = point.values[0];
+        break;
+      case "L":
+        value = point.values[1];
+        break;
+      default:
+        value = 0;
+        break;
+    }
+  }
+  return value;
+}

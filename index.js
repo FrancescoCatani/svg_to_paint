@@ -34,4 +34,7 @@ async function generateDartCode(XmlSvg_source_path, destination_path, file_name,
 
 }
 
+ generateDartCode('/Users/francescocatani/Desktop/user_placeholder.xml','/Users/francescocatani/Desktop', 'test','absolute')
+
+
 module.exports.generateDartCode = generateDartCode;

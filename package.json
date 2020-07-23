@@ -1,6 +1,6 @@
 {
   "name": "svg_to_paint",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A package to generate dart code from given svg file ",
   "main": "index.js",
   "repository": {
@@ -8,14 +8,19 @@
     "url": "https://github.com/FrancescoCatani/svg_to_paint.git"
   },
   "keywords": [
-    "npm",
-    "npm paint_to_svg",
-    "svg to dart code"
+    "svg to paint",
+    "svg to dart code",
+    "dart code generator",
+    "convert svg to dart code",
+    "write svg in dart",
+    "canvas"
   ],
   "author": "Francesco Catani, Camillo Bucciarelli",
   "license": "MIT",
   "dependencies": {
     "fs": "0.0.1-security",
+    "mustache": "^4.0.1",
+    "path": "^0.12.7",
     "svgpath": "^2.3.0",
     "xml-js": "^1.6.11"
   }
